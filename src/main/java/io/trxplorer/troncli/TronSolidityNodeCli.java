@@ -2,7 +2,9 @@ package io.trxplorer.troncli;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -128,6 +130,38 @@ public class TronSolidityNodeCli {
 		 
 		return this.client.getTransactionInfoById(BytesMessage.newBuilder().setValue(ByteString.copyFrom(ByteArray.fromHexString(hash))).build());
 		
+	}
+	
+	public CompletableFuture<TransactionInfo> getTxInfoByHashAsync(String hash){
+		
+		return CompletableFuture.supplyAsync(()->this.getTxInfoByHash(hash));
+	}
+	
+	public Map<String, TransactionInfo> getTxInfosByHash(List<String> hash){
+		
+		ArrayList<CompletableFuture> futures = new ArrayList<>();
+		
+		Map<String, TransactionInfo> result = Collections.synchronizedMap(new HashMap<String,TransactionInfo>());
+		
+		for(String txId:hash) {
+			
+			futures.add(this.getTxInfoByHashAsync(txId).thenAcceptAsync((info)->{
+				
+				result.put(txId,info);
+				
+			}));
+			
+		}
+		
+		try {
+			
+			CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).get();
+		
+		} catch (InterruptedException | ExecutionException  e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	public Block getLastBlock() {

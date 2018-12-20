@@ -17,7 +17,13 @@ public class TronSolidityNodeCliTest {
 	public void testGetBlocksByNums() {
 		System.out.println(cli.getBlocksByNums(Arrays.asList(4842687l)));
 		
-		//Assert.assertEquals(7, cli.getBlocksByNums(Arrays.asList(1l,2l,3l,101l,102l,201l,202l)).size());
+
+	}
+	
+	
+	@Test
+	public void testGetTransactionInfo() {
+		System.out.println(cli.getTxInfoByHash("78ed7f8a6e504f2fa821ba7e1c721dca5d0cf6a888dae7a83f67c49c32aaa84f").getFee());
 	}
 	
 }
