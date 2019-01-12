@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tron.api.GrpcAPI.AccountResourceMessage;
 import org.tron.api.GrpcAPI.BlockLimit;
 import org.tron.api.GrpcAPI.BlockList;
 import org.tron.api.GrpcAPI.BytesMessage;
@@ -43,6 +44,7 @@ import com.typesafe.config.Config;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.netty.util.concurrent.CompleteFuture;
 import io.trxplorer.troncli.wallet.BroadcastResult;
 
 public class TronFullNodeCli {
@@ -317,6 +319,28 @@ public class TronFullNodeCli {
 		
 		return this.client.getPaginatedExchangeList(PaginatedMessage.newBuilder().setLimit(100l).setOffset(0).build());
 		
+	}
+	
+	public AccountResourceMessage getAccountRessourceByAddress(String address) {
+		
+		try {
+			ByteString addressBS = ByteString.copyFrom(Wallet.decodeFromBase58Check(address));
+			
+			Account request = Account.newBuilder().setAddress(addressBS).build();
+			
+			AccountResourceMessage result = this.client.getAccountResource(request);
+	
+			return result;
+		
+		}catch(Exception e) {
+			logger.error("Could not get account:"+address, e);
+		}
+		return null;
+	}
+	
+	public CompletableFuture<AccountResourceMessage> getAccountRessourceByAddressAsync(String address){
+		
+		return CompletableFuture.supplyAsync(()->this.getAccountRessourceByAddress(address));
 	}
 	
 	public Exchange getExchangeById(Long id) {

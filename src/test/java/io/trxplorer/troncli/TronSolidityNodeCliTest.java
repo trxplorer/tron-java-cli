@@ -2,14 +2,23 @@ package io.trxplorer.troncli;
 
 import java.util.Arrays;
 
-import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.spongycastle.util.encoders.Hex;
+import org.tron.common.utils.ByteArray;
+import org.tron.common.utils.Sha256Hash;
+import org.tron.core.services.http.JsonFormat;
+import org.tron.protos.Protocol.Block;
+import org.tron.protos.Protocol.Transaction;
+import org.tron.protos.Protocol.TransactionInfo;
+import org.tron.protos.Protocol.TransactionInfo.Log;
+
 
 
 
 public class TronSolidityNodeCliTest {
 
-	private static TronSolidityNodeCli cli = new TronSolidityNodeCli("grpc.trongrid.io:50052",true);
+	private static TronSolidityNodeCli cli = new TronSolidityNodeCli("localhost:50051",true);
 	
 	
 	
@@ -20,10 +29,49 @@ public class TronSolidityNodeCliTest {
 
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testGetTransactionInfo() {
-		System.out.println(cli.getTxInfoByHash("78ed7f8a6e504f2fa821ba7e1c721dca5d0cf6a888dae7a83f67c49c32aaa84f").getFee());
+		
+		while(true) {
+			
+			Block b = cli.getLastBlock();
+		
+			for(Transaction t:b.getTransactionsList()) {
+				
+			//	System.out.println(JsonFormat.printToString(t));
+				
+				String txHash = Sha256Hash.of(t.getRawData().toByteArray()).toString();
+				int txCount = cli.getTxInfoByHash(txHash).getLogList().size();
+				if (txCount>0) {
+//					System.out.println("tx=>"+txHash);
+//					System.out.println("count=>"+txCount);
+					TransactionInfo txInfo = cli.getTxInfoByHash(txHash);
+					
+					String str = ByteArray.toStr(ByteArray
+					        .fromHexString(ByteArray.toHexString(txInfo.getContractResult(0).toByteArray())));
+					System.out.println(str);
+//					for(ByteString results:txInfo.getContractResultList()) {
+//						System.out.println(results.toString());
+//					}
+					
+//					for(Log log:txInfo.getLogList()) {
+//						
+//						System.out.println(Hex.toHexString(log.getTopics(0).toByteArray()));	
+//					}
+					
+					break;
+				}
+				
+				
+				
+			}
+			
+		}
+		
+		
+		
+
 	}
 	
 }
