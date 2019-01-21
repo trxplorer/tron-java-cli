@@ -21,10 +21,9 @@
 
 
 		<dependency>
-			<groupId>com.github.tronprotocol</groupId>
+			<groupId>com.github.nfleury</groupId>
 			<artifactId>java-tron</artifactId>
-			<version>178951d45faa7f0f993641f6acb832e5fe6271b4</version>
-
+			<version>deb4750adcfca588f4a7a877e1761e1ebdcb83b4</version>
 		</dependency>
 
 
