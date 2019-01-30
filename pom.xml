@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	
-	<groupId>com.github.trxplorer</groupId>
+	<groupId>io.trxplorer</groupId>
 	<artifactId>tron-java-cli</artifactId>
-	<version>master-SNAPSHOT</version>
+	<version>-SNAPSHOT</version>
 
 	<name>Tron Java client</name>
 	<description>Tron client</description>

@@ -21,6 +21,7 @@ import org.tron.core.Constant;
 import org.tron.core.Wallet;
 import org.tron.protos.Protocol.Account;
 import org.tron.protos.Protocol.Block;
+import org.tron.protos.Protocol.Transaction;
 import org.tron.protos.Protocol.TransactionInfo;
 import org.tron.protos.Protocol.Witness;
 
@@ -31,7 +32,7 @@ import com.typesafe.config.Config;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
-public class TronSolidityNodeCli {
+public class TronSolidityNodeCli implements ITronNodeCli{
 	
 	private ManagedChannel channelFull = null;
 	private WalletSolidityGrpc.WalletSolidityBlockingStub client = null;
@@ -69,14 +70,20 @@ public class TronSolidityNodeCli {
 		Account request = Account.newBuilder().setAddress(addressBS).build();
 		
 		Account account = this.client.getAccount(request);
-
+		
 		return account;
 		}catch(Exception e) {
 			logger.error("Could not get account:"+address, e);
 		}
 		return null;
 	}
-
+	
+	public Transaction getTransactionByHash(String hash) {
+		
+		
+		return this.client.getTransactionById(BytesMessage.newBuilder().setValue(ByteString.copyFrom(ByteArray.fromHexString(hash))).build());
+	}
+	
 	
 	public Block getBlockByNum(Long blockNum) {
 
@@ -152,7 +159,6 @@ public class TronSolidityNodeCli {
 			}));
 			
 		}
-		
 		try {
 			
 			CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).get();
@@ -163,6 +169,8 @@ public class TronSolidityNodeCli {
 		
 		return result;
 	}
+	
+	
 	
 	public Block getLastBlock() {
 		return client.getNowBlock(EmptyMessage.newBuilder().build());
