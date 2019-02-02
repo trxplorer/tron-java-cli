@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tron.core.Wallet;
+import org.tron.protos.Contract.AssetIssueContract;
 
 
 @Ignore
@@ -74,11 +75,22 @@ public class TronFullNodeCliTest {
 		System.out.println(cli.triggerContract(Wallet.decodeFromBase58Check("TCMjU3taxp19xNWMFQdQw45CYwQcqrsYqA"), 
 				"supply()","#", false, 0, 0, Wallet.decodeFromBase58Check("TEG22eLj9dTPyBCFA3X9oQbmy8mmdCT2NF"), "03c544f59f0fb28309c69562f8bc252cddbcf3086fd12ad7274f8130dbacfd4a"));
 		
+	
+		
 	}
 	
 	public static void main(String[] args) {
 		
 		System.out.println(Integer.toHexString(1));
+		
+	}
+	
+	@Test
+	public void testGetAssetById() {
+		
+		AssetIssueContract contract = this.cli.getAssetIssueContractById("1002000");
+		System.out.println(contract.getName());
+		//Assert.assertEquals(expected, actual);
 		
 	}
 	

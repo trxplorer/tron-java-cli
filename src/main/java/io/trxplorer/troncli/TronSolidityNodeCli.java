@@ -19,6 +19,7 @@ import org.tron.api.WalletSolidityGrpc;
 import org.tron.common.utils.ByteArray;
 import org.tron.core.Constant;
 import org.tron.core.Wallet;
+import org.tron.protos.Contract.AssetIssueContract;
 import org.tron.protos.Protocol.Account;
 import org.tron.protos.Protocol.Block;
 import org.tron.protos.Protocol.Transaction;
@@ -118,6 +119,13 @@ public class TronSolidityNodeCli implements ITronNodeCli{
 	
 	public CompletableFuture<Block> getBlockByNumAsync(Long blockNum) {
 		return CompletableFuture.supplyAsync(()->this.client.getBlockByNum(NumberMessage.newBuilder().setNum(blockNum).build()));
+	}
+	
+	public AssetIssueContract getAssetIssueContractById(String id) {
+		
+		AssetIssueContract assetIssueContract = this.client.getAssetIssueById(BytesMessage.newBuilder().setValue(ByteString.copyFrom(ByteArray.fromString(id))).build());
+		
+		return assetIssueContract;
 	}
 	
 	public List<Witness> getAllWitnesses() {

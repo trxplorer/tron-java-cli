@@ -38,6 +38,7 @@ import org.tron.common.utils.Sha256Hash;
 import org.tron.core.Constant;
 import org.tron.core.Wallet;
 import org.tron.protos.Contract;
+import org.tron.protos.Contract.AssetIssueContract;
 import org.tron.protos.Contract.TriggerSmartContract;
 import org.tron.protos.Protocol.Account;
 import org.tron.protos.Protocol.Block;
@@ -200,9 +201,16 @@ public class TronFullNodeCli implements ITronNodeCli{
 		}
 
 	}
-
+	
+	public AssetIssueContract getAssetIssueContractById(String id) {
+		
+		AssetIssueContract assetIssueContract = this.client.getAssetIssueById(BytesMessage.newBuilder().setValue(ByteString.copyFrom(ByteArray.fromLong(Long.valueOf(id)))).build());
+		
+		return assetIssueContract;
+	}
+	
 	public List<Block> getBlocksByNums(List<Long> blockNums) {
-
+		
 		Collections.sort(blockNums);
 
 		HashMap<String, List<Long>> groups = new HashMap<>();
@@ -389,6 +397,8 @@ public class TronFullNodeCli implements ITronNodeCli{
 
 	public org.tron.protos.Protocol.NodeInfo getNodeInfo() {
 		
+
+		
 		return this.client.getNodeInfo(EmptyMessage.newBuilder().build());
 		
 	}
@@ -400,6 +410,8 @@ public class TronFullNodeCli implements ITronNodeCli{
 	}
 	
 
+	
+	
 	
 	public String triggerContract(byte[] contractAddress, String method, String argsStr, Boolean isHex, long callValue,
 			long feeLimit, byte[] ownerAddress, String priKey) throws InterruptedException, ExecutionException {
