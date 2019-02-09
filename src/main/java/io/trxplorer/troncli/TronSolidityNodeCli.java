@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tron.api.GrpcAPI.AssetIssueList;
 import org.tron.api.GrpcAPI.BytesMessage;
 import org.tron.api.GrpcAPI.EmptyMessage;
 import org.tron.api.GrpcAPI.NumberMessage;
@@ -124,9 +125,22 @@ public class TronSolidityNodeCli implements ITronNodeCli{
 	public AssetIssueContract getAssetIssueContractById(String id) {
 		
 		AssetIssueContract assetIssueContract = this.client.getAssetIssueById(BytesMessage.newBuilder().setValue(ByteString.copyFrom(ByteArray.fromString(id))).build());
-		
 		return assetIssueContract;
 	}
+	
+	public List<AssetIssueContract> getAssetIssueList(){
+		
+		List<AssetIssueContract> result = new ArrayList<>();
+		
+		AssetIssueList assetIssueList = this.client.getAssetIssueList(EmptyMessage.newBuilder().build());
+		
+		if (assetIssueList!=null) {
+			result = assetIssueList.getAssetIssueList();
+		}
+
+		return result;
+	}
+	
 	
 	public List<Witness> getAllWitnesses() {
 

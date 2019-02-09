@@ -3,15 +3,14 @@ package io.trxplorer.troncli;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.tron.common.logsfilter.ContractEventParser;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.Sha256Hash;
 import org.tron.core.Wallet;
-import org.tron.core.services.http.JsonFormat;
 import org.tron.protos.Contract.AssetIssueContract;
-import org.tron.protos.Contract.TriggerSmartContract;
 import org.tron.protos.Protocol.Block;
 import org.tron.protos.Protocol.SmartContract;
 import org.tron.protos.Protocol.SmartContract.ABI.Entry;
@@ -90,8 +89,9 @@ public class TronSolidityNodeCliTest {
 	public void testGetAssetById() {
 		
 		AssetIssueContract contract = this.cli.getAssetIssueContractById("1002000");
-		System.out.println(contract.getName().toStringUtf8());
-		//Assert.assertEquals(expected, actual);
+		System.out.println();
+		
+		Assert.assertEquals("BitTorrent", contract.getName().toStringUtf8());
 		
 	}
 	
@@ -100,8 +100,16 @@ public class TronSolidityNodeCliTest {
 		
 		TransactionInfo txInfo = cli.getTxInfoByHash("f7e8a25f8c6287f8152504f1b75174f87d6f1d97dd9acf79784dfe1c87c1c5bb");
 		
-		System.out.println(txInfo.getInternalTransactionsList());
+		Assert.assertEquals(1, txInfo.getInternalTransactionsList().size());
 		
+	}
+	
+	@Test
+	public void testGetAssetIssueList() {
+		
+		List<AssetIssueContract> list = cli.getAssetIssueList();
+
+		Assert.assertTrue(list.size()>0);
 	}
 	
 	
