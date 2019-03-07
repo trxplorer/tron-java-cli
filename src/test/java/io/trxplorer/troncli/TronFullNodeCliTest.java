@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tron.core.Wallet;
 import org.tron.protos.Contract.AssetIssueContract;
+import org.tron.protos.Protocol.Account;
+import org.tron.protos.Protocol.TransactionInfo;
 
 
-@Ignore
+
 public class TronFullNodeCliTest {
 
 	private static TronFullNodeCli cli = new TronFullNodeCli("grpc.trongrid.io:50051",true);
@@ -32,6 +35,23 @@ public class TronFullNodeCliTest {
 	public void getGetMoreThan100Blocks() {
 		
 		Assert.assertTrue(cli.getBlocks(1,200 ).size()>100);
+		
+		
+	}
+	
+	@Test
+	public void getAccountByAddress() {
+		
+		String address = "TGRT13eUDQDSyzg6qcabQGPbSbvNT1MY5u";
+		
+		Account account = cli.getAccountByAddress(address);
+		
+		System.out.println(account);
+		
+		Assert.assertNotNull(account);
+		Assert.assertEquals(address, Wallet.encode58Check(account.getAddress().toByteArray()));
+		
+		
 		
 		
 	}
@@ -78,20 +98,31 @@ public class TronFullNodeCliTest {
 	
 		
 	}
-	
-	public static void main(String[] args) {
-		
-		System.out.println(Integer.toHexString(1));
-		
-	}
+
 	
 	@Test
 	public void testGetAssetById() {
 		
 		AssetIssueContract contract = this.cli.getAssetIssueContractById("1002000");
-		System.out.println(contract.getName());
+		System.out.println(contract.getId());
+		System.out.println(contract.getName().toStringUtf8());
 		//Assert.assertEquals(expected, actual);
 		
 	}
 	
+	@Test
+	public void testTxInfo() {
+		
+		TransactionInfo txInfo = this.cli.getTxInfoByHash("f3e5ba82b5813f289d37feae29ab3520093ad462b8c21cf9bee51d856349269f");
+		
+		System.out.println(txInfo);
+		
+	}
+	
+	@Test
+	public void testAssetIssueByAccount() {
+		
+		Assert.assertEquals("1000001", this.cli.getAssetIssueContractByAccount("TGzz8gjYiYRqpfmDwnLxfgPuLVNmpCswVp").getId());
+		
+	}
 }

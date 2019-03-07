@@ -98,8 +98,8 @@ public class TronSolidityNodeCliTest {
 	@Test
 	public void testInternalTx() {
 		
-		TransactionInfo txInfo = cli.getTxInfoByHash("f7e8a25f8c6287f8152504f1b75174f87d6f1d97dd9acf79784dfe1c87c1c5bb");
-		
+		TransactionInfo txInfo = cli.getTxInfoByHash("cedd3125774bb65049c175d06b8301efeb86fb061e4282bc79d4484e76c8103b");
+		System.out.println(txInfo);
 		Assert.assertEquals(1, txInfo.getInternalTransactionsList().size());
 		
 	}

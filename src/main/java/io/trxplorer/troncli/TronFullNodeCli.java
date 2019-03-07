@@ -203,10 +203,16 @@ public class TronFullNodeCli implements ITronNodeCli{
 	}
 	
 	public AssetIssueContract getAssetIssueContractById(String id) {
-		
+
 		AssetIssueContract assetIssueContract = this.client.getAssetIssueById(BytesMessage.newBuilder().setValue(ByteString.copyFrom(ByteArray.fromLong(Long.valueOf(id)))).build());
 		
 		return assetIssueContract;
+	}
+	
+	
+	public AssetIssueContract getAssetIssueContractByAccount(String accountAddress) {
+
+		return this.client.getAssetIssueByAccount(this.getAccountByAddress(accountAddress)).getAssetIssue(0);
 	}
 	
 	public List<Block> getBlocksByNums(List<Long> blockNums) {
